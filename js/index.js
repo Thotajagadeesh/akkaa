@@ -245,7 +245,7 @@ S.UI = (function () {
 // ======================
 
 // Use correct relative path: js/audio/filename
-let audio = new Audio("WhatsApp Audio 2025-08-22 at 11.10.28 PM.mpeg");
+let audio = new Audio("js/audio.mpeg");
 audio.loop = true;
 
 // Required: play after first user interaction
