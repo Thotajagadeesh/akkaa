@@ -107,7 +107,7 @@ S.UI = (function () {
 
   function getAction(value) {
     value = value && value.split(' ')[0];
-    return value && value[0] === cmd && value.substring(1);
+    return value && value[0] === cmd ? value.substring(1) : null;
   }
 
   function timedAction(fn, delay, max, reverse) {
@@ -165,14 +165,8 @@ S.UI = (function () {
 
         case 'rectangle':
           value = value && value.split('x');
-          value = (value && value.length === 2) ? value : [maxShapeSize, maxShapeSize / 2];
-
-          S.Shape.switchShape(
-            S.ShapeBuilder.rectangle(
-              Math.min(maxShapeSize, parseInt(value[0])),
-              Math.min(maxShapeSize, parseInt(value[1]))
-            )
-          );
+          value = (value && value.length === 2) ? [Math.min(maxShapeSize, parseInt(value[0])), Math.min(maxShapeSize, parseInt(value[1]))] : [maxShapeSize, maxShapeSize / 2];
+          S.Shape.switchShape(S.ShapeBuilder.rectangle(value[0], value[1]));
           break;
 
         case 'circle':
@@ -183,7 +177,6 @@ S.UI = (function () {
 
         case 'time':
           var t = formatTime(new Date());
-
           if (sequence.length > 0) {
             S.Shape.switchShape(S.ShapeBuilder.letter(t));
           } else {
@@ -198,9 +191,7 @@ S.UI = (function () {
           break;
 
         default:
-          S.Shape.switchShape(
-            S.ShapeBuilder.letter(current[0] === cmd ? 'What?' : current)
-          );
+          S.Shape.switchShape(S.ShapeBuilder.letter(current[0] === cmd ? 'What?' : current));
       }
     }, 2000, sequence.length);
   }
@@ -234,24 +225,19 @@ S.UI = (function () {
 }());
 
 // ======================
-// Tabs, Point, Color, Dot, ShapeBuilder, Shape
-// (unchanged from your code)
-// ======================
-
-// ... (keep all your Tabs, Point, Color, Dot, ShapeBuilder, Shape code unchanged) ...
-
-// ======================
 // 🎵 Background Audio
 // ======================
-
-// Use correct relative path: js/audio/filename
 let audio = new Audio("js/audio.mpeg");
 audio.loop = true;
 
-// Required: play after first user interaction
-document.addEventListener("click", () => {
-  audio.play();
-}, { once: true });
+// Play after first click or key press
+function startAudio() {
+  audio.play().catch(() => console.log("Audio blocked by browser, click to start"));
+  document.removeEventListener("click", startAudio);
+  document.removeEventListener("keydown", startAudio);
+}
+document.addEventListener("click", startAudio);
+document.addEventListener("keydown", startAudio);
 
 // ======================
 // Start animation
