@@ -21,10 +21,20 @@
 </head>
 
 <body>
-	<audio autoplay loop>
+	<audio autoplay loop muted id="bg-audio">
   <source src="js/audio.mpeg" type="audio/mpeg">
   Your browser does not support the audio element.
-	</audio>
+</audio>
+
+<script>
+  document.body.addEventListener('click', () => {
+    const audio = document.getElementById('bg-audio');
+    audio.muted = false;
+    audio.play();
+  }, { once: true });
+</script>
+
+	
 	
 
 
